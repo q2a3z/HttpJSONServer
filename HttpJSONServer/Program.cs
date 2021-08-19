@@ -59,7 +59,7 @@ namespace HttpJSONServer
         }
 
         // This example requires the System and System.Net namespaces.
-        public static void SimpleListenerExample(string prefixes) 
+        public static void SimpleListenerExample(string prefixes, bool state) 
         {
             if (!HttpListener.IsSupported) 
             {
@@ -78,7 +78,7 @@ namespace HttpJSONServer
             //{
             listener.Prefixes.Add(prefixes);
             //}
-            while (true) 
+            while (state) 
             {
                 listener.Start();
                 Console.WriteLine(prefixes);
@@ -96,7 +96,8 @@ namespace HttpJSONServer
                 HttpListenerResponse response = context.Response;
                 response.StatusCode = (int)HttpStatusCode.OK;
                 response.ContentType = "application/json";
-                string jsonString = System.IO.File.ReadAllText(@".\JFILE\WriteText.txt");//"{\"audit-\":\"0000\"}";
+                response.AddHeader("ADDHEADER", "test");
+                string jsonString = "{\"audit-\":\"0000\"}";//System.IO.File.ReadAllText(@".\JFILE\WriteText.txt");//"{\"audit-\":\"0000\"}";
                 response.StatusDescription = "{}";
                 //Construct a response.
                 string responseString = jsonString;
@@ -147,7 +148,7 @@ namespace HttpJSONServer
         {
             // Example #1
             // Read the file as one string.
-            string text = System.IO.File.ReadAllText(@".\JFILE\WriteText.txt");
+            string text = System.IO.File.ReadAllText(@"..\..\JFILE\WriteText.txt");
 
             // Display the file contents to the console. Variable text is a string.
             System.Console.WriteLine("Contents of WriteText.txt = {0}", text);
@@ -155,7 +156,7 @@ namespace HttpJSONServer
             // Example #2
             // Read each line of the file into a string array. Each element
             // of the array is one line of the file.
-            string[] lines = System.IO.File.ReadAllLines(@".\JFILE\WriteLines2.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"..\..\JFILE\WriteLines2.txt");
 
             // Display the file contents by using a foreach loop.
             System.Console.WriteLine("Contents of WriteLines2.txt = ");
@@ -186,13 +187,13 @@ namespace HttpJSONServer
             */
             //ThreadMethodをスレッドプールで実行できるように
             //WaitCallbackデリゲートを作成
-            WaitCallback waitCallback = new WaitCallback(ThreadListener);
+            //WaitCallback waitCallback = new WaitCallback(ThreadListener);
 
-            //スレッドプールに登録
-            ThreadPool.QueueUserWorkItem(waitCallback, "http://*:65535/UAPI/");
-            ThreadPool.QueueUserWorkItem(waitCallback, "http://*:8800//UAPI/");
+            ////スレッドプールに登録
+            //ThreadPool.QueueUserWorkItem(waitCallback, "http://*:65535/UAPI/");
+            //ThreadPool.QueueUserWorkItem(waitCallback, "http://*:8800//UAPI/");
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
         private static void ThreadListener(object state) 
         {

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -95,7 +96,7 @@ namespace HttpJSONServer
                 HttpListenerResponse response = context.Response;
                 response.StatusCode = (int)HttpStatusCode.OK;
                 response.ContentType = "application/json";
-                string jsonString = "{\"audit-\":\"0000\"}";
+                string jsonString = System.IO.File.ReadAllText(@".\JFILE\WriteText.txt");//"{\"audit-\":\"0000\"}";
                 response.StatusDescription = "{}";
                 //Construct a response.
                 string responseString = jsonString;
@@ -108,6 +109,60 @@ namespace HttpJSONServer
                 output.Close();
 
                 listener.Stop();
+            }
+        }
+        public static async void POStAsync(string url)
+        {
+
+            //var request = (HttpWebRequest)WebRequest.Create(url);
+
+            //var postData = "username=" + Uri.EscapeDataString("myUser");
+            //postData += "&password=" + Uri.EscapeDataString("myPassword");
+            //var data = System.Text.Encoding.UTF8.GetBytes(postData);
+
+            //request.Method = "POST";
+            //request.ContentType = "application/x-www-form-urlencoded";
+            //request.ContentLength = data.Length;
+
+            //using (var stream = request.GetRequestStream())
+            //{
+            //    stream.Write(data, 0, data.Length);
+            //}
+
+            //var response = (HttpWebResponse)request.GetResponse();
+            //private static readonly HttpClient client = new HttpClient();
+            HttpClient client = new HttpClient();
+            var values = new Dictionary<string, string>
+            {
+                { "username", "myUser" },
+                { "password", "myPassword" }
+            };
+            var data2 = new FormUrlEncodedContent(values);
+            var response2 = await client.PostAsync(url, data2);
+            string result = response2.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(response2);
+            Console.WriteLine(result);
+        }
+        public static void readFile()
+        {
+            // Example #1
+            // Read the file as one string.
+            string text = System.IO.File.ReadAllText(@".\JFILE\WriteText.txt");
+
+            // Display the file contents to the console. Variable text is a string.
+            System.Console.WriteLine("Contents of WriteText.txt = {0}", text);
+
+            // Example #2
+            // Read each line of the file into a string array. Each element
+            // of the array is one line of the file.
+            string[] lines = System.IO.File.ReadAllLines(@".\JFILE\WriteLines2.txt");
+
+            // Display the file contents by using a foreach loop.
+            System.Console.WriteLine("Contents of WriteLines2.txt = ");
+            foreach (string line in lines)
+            {
+                // Use a tab to indent each line of the file.
+                Console.WriteLine("\t" + line);
             }
         }
     }

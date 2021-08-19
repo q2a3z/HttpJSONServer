@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,16 +19,18 @@ namespace HttpJSONServer
         public Form1()
         {
             InitializeComponent();
-            AllocConsole();                                        // この行を追加
+            //AllocConsole();                                        // この行を追加
             button1.Click += new EventHandler(button1_Click);
             button2.Click += new EventHandler(button2_Click);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var now = DateTime.Now;
-            Console.WriteLine(now.ToString("yyyy年M月dd日（ddd）HH:mm:ss.fff"));
-            Console.WriteLine(now.ToString("ggyyyy年MM月dd日（dddd）tthh時mm分ss秒"));
+            //var now = DateTime.Now;
+            //Console.WriteLine(now.ToString("yyyy年M月dd日（ddd）HH:mm:ss.fff"));
+            //Console.WriteLine(now.ToString("ggyyyy年MM月dd日（dddd）tthh時mm分ss秒"));
+            //ServerListtener.readFile();
+            ServerListtener.POStAsync("http://localhost:8800/UAPI/");
         }
 
         private void button2_Click(object sender, EventArgs e)

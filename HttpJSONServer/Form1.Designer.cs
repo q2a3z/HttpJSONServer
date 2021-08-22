@@ -31,6 +31,7 @@ namespace HttpJSONServer
         {
             this.ReqBtn = new System.Windows.Forms.Button();
             this.StartBtn = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ReqBtn
@@ -54,16 +55,27 @@ namespace HttpJSONServer
             this.StartBtn.UseVisualStyleBackColor = false;
             this.StartBtn.Click += new System.EventHandler(this.StartBtn_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(495, 75);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 12);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "label1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.StartBtn);
             this.Controls.Add(this.ReqBtn);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -71,6 +83,7 @@ namespace HttpJSONServer
 
         private System.Windows.Forms.Button ReqBtn;
         private System.Windows.Forms.Button StartBtn;
+        private System.Windows.Forms.Label label1;
     }
 }
 

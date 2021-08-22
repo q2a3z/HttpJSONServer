@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace HttpJSONServer
 {
@@ -20,8 +23,6 @@ namespace HttpJSONServer
         {
             InitializeComponent();
             //AllocConsole();                                        // この行を追加
-            //button1.Click += new EventHandler(button1_Click);
-            //button2.Click += new EventHandler(button2_Click);
         }
 
         private void RequestBtn_Click(object sender, EventArgs e)
@@ -30,51 +31,34 @@ namespace HttpJSONServer
             //Console.WriteLine(now.ToString("yyyy年M月dd日（ddd）HH:mm:ss.fff"));
             //Console.WriteLine(now.ToString("ggyyyy年MM月dd日（dddd）tthh時mm分ss秒"));
             //ServerListtener.readFile();
-            ServerListtener.POStAsync("http://localhost:8800/UAPI/");
+            //ServerListtener.POStAsync("http://localhost:8800/UAPI/");
+            SampleData data = new SampleData();
+            //data.name = "大泉 洋";
+            data.age = "44歳";
+            string json = JsonPhase.ToJson(data);
+            Console.WriteLine(json);
+            using (StreamReader r = new StreamReader(@"..\..\JFILE\file.json"))
+            {
+                SampleData json2 = data;
+                json2 = JsonPhase.ToObject<SampleData>(r.ReadToEnd());
+                Console.WriteLine("{0}\n{1}", json2.Name, json2.age);
+                //List<Item> items = JsonConvert.DeserializeObject<List<Item>>(json);
+            }
         }
         private static ManualResetEvent mre = new ManualResetEvent(false);
         private void StartBtn_Click(object sender, EventArgs e)
-        {
-            Thread t = new Thread(ThreadListener);
-            t.IsBackground = true;
-            if (!ServerState)
+        { 
+            // ホスト名を取得する
+            string hostname = Dns.GetHostName();
+
+            // ホスト名からIPアドレスを取得する
+            IPAddress[] adrList = Dns.GetHostAddresses(hostname);
+            foreach (IPAddress address in adrList)
             {
-                StartBtn.BackColor = Color.Red;
-                StartBtn.Text = "STARTING";
-                //ThreadMethodをスレッドプールで実行できるように
-                //WaitCallbackデリゲートを作成
-                //WaitCallback waitCallback = new WaitCallback(ThreadListener);
-
-                //スレッドプールに登録
-                //ThreadPool.QueueUserWorkItem(waitCallback, "http://localhost:65535/UAPI/");
-                //ThreadPool.QueueUserWorkItem(waitCallback, "http://localhost:8800/UAPI/");
-                //ThreadPool.QueueUserWorkItem(p => ThreadListener("http://localhost:8800/UAPI/"));
-                
-                t.Start();
-                ServerState = !ServerState;
-
+                Console.WriteLine(address.ToString());
             }
-            else 
-            {
-                Console.WriteLine("Welcom to C# ABORRT");
-                mre.Set();
+            this.label1.Text = HttpJSONServer.API.API_CALL.VersionCheck() ?"SUCCESS" : "FAILD";
 
-
-            }
-
-            //Console.Clear();
-            //Console.WriteLine("Welcom to C#");
-            //string[] strUserName = new string[1] { "http://localhost:8800/Pay/" };
-            //Console.WriteLine("Listening to the: {0}", strUserName[0]);
-            //ServerListtener.SimpleListenerExample(strUserName[0]);
-
-            //Console.ReadLine();
-        }
-
-        private static void ThreadListener()
-        {
-
-            ServerListtener.SimpleListenerExample("http://localhost:8800/UAPI/", true);
         }
     }
 }
